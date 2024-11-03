@@ -1,10 +1,17 @@
-// Function to fetch user IP, location, ISP details
+// Function to fetch user IP, location, and ISP details
 async function fetchUserInfo() {
     try {
-        const response = await fetch('https://ipapi.co/json/'); // Get user details based on IP
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+
         const data = await response.json();
         
-        // Display IP address, country, and ISP name
+        // Check data is as expected
+        console.log("Fetched data:", data);
+        
+        // Display IP address, location, and ISP name
         document.getElementById("ip").textContent = data.ip;
         document.getElementById("country").textContent = `${data.city}, ${data.region}, ${data.country_name}`;
         document.getElementById("isp-name").textContent = data.org;
@@ -14,8 +21,7 @@ async function fetchUserInfo() {
         document.getElementById("local-time").textContent = localTime;
 
         // Display device information
-        const deviceInfo = `${navigator.userAgent}`;
-        document.getElementById("device-info").textContent = deviceInfo;
+        document.getElementById("device-info").textContent = navigator.userAgent;
         
     } catch (error) {
         console.error("Error fetching user info:", error);
@@ -29,7 +35,7 @@ async function fetchUserInfo() {
 
 // Function to calculate network speed
 function calculateNetworkSpeed() {
-    const testImage = "https://via.placeholder.com/1000x1000.jpg"; // URL of test image
+    const testImage = "https://via.placeholder.com/1000x1000.jpg";
     const downloadSize = 1000 * 1000 * 1; // Size in bytes (1 MB)
     const startTime = new Date().getTime();
     
@@ -50,7 +56,7 @@ function calculateNetworkSpeed() {
     download.src = `${testImage}?cacheBuster=${startTime}`; // Avoid cached image
 }
 
-// Run all functions on page load
+// Run functions on page load
 window.onload = function() {
     fetchUserInfo();
     calculateNetworkSpeed();
