@@ -1,7 +1,7 @@
 // Function to fetch user IP, location, and ISP details
 async function fetchUserInfo() {
     try {
-        const response = await fetch('https://ipapi.co/json/');
+        const response = await fetch('https://ipinfo.io/json?token=YOUR_ACCESS_TOKEN'); // Replace YOUR_ACCESS_TOKEN with a free token from ipinfo.io
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.statusText}`);
         }
@@ -13,11 +13,11 @@ async function fetchUserInfo() {
         
         // Display IP address, location, and ISP name
         document.getElementById("ip").textContent = data.ip;
-        document.getElementById("country").textContent = `${data.city}, ${data.region}, ${data.country_name}`;
-        document.getElementById("isp-name").textContent = data.org;
+        document.getElementById("country").textContent = `${data.city}, ${data.region}, ${data.country}`;
+        document.getElementById("isp-name").textContent = data.org || "ISP info not available";
 
-        // Display local time based on user's timezone
-        const localTime = new Date().toLocaleString("en-US", { timeZone: data.timezone });
+        // Display local time based on user's timezone (fallback to user’s system time)
+        const localTime = new Date().toLocaleString("en-US", { timeZone: data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone });
         document.getElementById("local-time").textContent = localTime;
 
         // Display device information
